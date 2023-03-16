@@ -29,7 +29,8 @@ class ImgAugTransform:
         # distort
         # sometimes(iaa.Crop(percent=(0.01, 0.05), sample_independently=True)),
         sometimes(iaa.PerspectiveTransform(scale=(0.01, 0.01))),
-        sometimes(iaa.Affine(scale=(0.7, 1.3), translate_percent=(-0.1, 0.1), 
+        sometimes(iaa.Affine(scale=(0.7, 1.3),
+                            # translate_percent=(-0.1, 0.1),
 #                            rotate=(-5, 5), shear=(-5, 5), 
                             order=[0, 1], cval=(0, 255), 
                             mode=ia.ALL)),
