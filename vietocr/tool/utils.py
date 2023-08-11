@@ -8,6 +8,8 @@ import tempfile
 from tqdm import tqdm
 
 def download_weights(uri, cached=None, md5=None, quiet=False):
+    if type(uri) == tuple:
+        uri = uri[0]
     if uri.startswith('http'):
         return download(url=uri, quiet=quiet)
     return uri

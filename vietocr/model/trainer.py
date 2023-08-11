@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 import time
 
 class Trainer():
-    def __init__(self, config, pretrained=True, augmentor=ImgAugTransform()):
+    def __init__(self, config, pretrained=True, using_lion = False, augmentor=ImgAugTransform()):
 
         self.config = config
         self.model, self.vocab = build_model(config)
@@ -63,9 +63,12 @@ class Trainer():
 
         self.iter = 0
         
-        # self.optimizer = AdamW(self.model.parameters(), betas=(0.9, 0.98), eps=1e-09)
-        self.optimizer = Lion(self.model.parameters(), lr=self.max_lr, weight_decay=1e-2)
-        print("using Lion Optimizer")
+        self.optimizer = AdamW(self.model.parameters(), betas=(0.9, 0.98), eps=1e-09)
+        if using_lion:
+            self.optimizer = Lion(self.model.parameters(), lr=self.max_lr, weight_decay=1e-2)
+            print("using Lion Optimizer")
+        else:
+            print("using AdamW Optimizer")
         self.scheduler = OneCycleLR(self.optimizer, total_steps=self.num_iters, **config['optimizer'])
 #        self.optimizer = ScheduledOptim(
 #            Adam(self.model.parameters(), betas=(0.9, 0.98), eps=1e-09),
