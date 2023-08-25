@@ -6,7 +6,7 @@ import imgaug as ia
 
 class ImgAugTransform:
   def __init__(self):
-    sometimes = lambda aug: iaa.Sometimes(0.3, aug)
+    sometimes = lambda aug: iaa.Sometimes(0.4, aug)
 
     self.aug = iaa.Sequential(iaa.SomeOf((1, 5), 
         [
@@ -25,6 +25,9 @@ class ImgAugTransform:
         sometimes(iaa.Add((-40, 40), per_channel=0.5)),
 
         sometimes(iaa.JpegCompression(compression=(5, 80))),
+
+        # convert to gray in 30% cases
+        sometimes(iaa.Grayscale(alpha=1.0)),
         
         # distort
         # sometimes(iaa.Crop(percent=(0.01, 0.05), sample_independently=True)),
