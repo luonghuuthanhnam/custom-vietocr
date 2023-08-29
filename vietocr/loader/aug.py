@@ -8,7 +8,7 @@ class ImgAugTransform:
   def __init__(self):
     sometimes = lambda aug: iaa.Sometimes(0.4, aug)
 
-    self.aug = iaa.Sequential(iaa.SomeOf((1, 5), 
+    self.aug = iaa.Sequential(iaa.SomeOf((3, None), 
         [
         # blur
 
@@ -27,7 +27,7 @@ class ImgAugTransform:
         sometimes(iaa.JpegCompression(compression=(5, 80))),
 
         # convert to gray in 30% cases
-        sometimes(iaa.Grayscale(alpha=1.0)),
+        # sometimes(iaa.Grayscale(alpha=1.0)),
         
         # distort
         # sometimes(iaa.Crop(percent=(0.01, 0.05), sample_independently=True)),
@@ -44,9 +44,17 @@ class ImgAugTransform:
     ],
         random_order=True),
     random_order=True)
+
+    sometimes_gray = lambda aug_gray: iaa.Sometimes(0.7, aug_gray)
+    self.aug_gray = iaa.Sequential(iaa.SomeOf((1, 1), 
+        [sometimes_gray(iaa.Grayscale(alpha=1.0)),
+        ]
+    ))
+
       
   def __call__(self, img):
     img = np.array(img)
     img = self.aug.augment_image(img)
+    img = self.aug_gray.augment_image(img)
     img = Image.fromarray(img)
     return img
